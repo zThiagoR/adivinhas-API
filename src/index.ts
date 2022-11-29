@@ -22,7 +22,7 @@ app.use(express.json())
 app.get('/adivinhas', (req, res) => {
   return res.send({
     message: 'Total de adivinhas: ' + data.length,
-    data
+    list: data
   });
 });
 
@@ -96,7 +96,7 @@ app.post('/adivinhas/confirm/:id', (req, res) => {
 
   res.send({
     message: 'Adivinha confirmada com sucesso!',
-    data: DataJson.at(-1)
+    list: DataJson.at(-1)
   })
 })
 

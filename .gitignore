@@ -1,3 +1,6 @@
+# files JSON
+src/*.json
+
 # Logs
 logs
 *.log

@@ -61,6 +61,13 @@ app.post('/adivinhas/send-new', (req, res) => {
 })
 
 app.get('/adivinhas/confirm', (req, res) => {
+
+  if (newData.length === 0) {
+    return res.send({
+      message: 'Nenhuma adivinha para confirmar',
+    })
+  }
+
   return res.send({
     message: 'Total de adivinhas para confirmar: ' + newData.length,
     data: newData

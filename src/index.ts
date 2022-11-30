@@ -36,13 +36,13 @@ app.post('/adivinhas/send-new', (req, res) => {
   }
 
   if(DataJson.some((item) => item.question === question) || DataJson.some((item) => item.answer === answer)) {
-    return res.status(400).send({
+    return res.status(422).send({
       message: 'Pergunta ou resposta já existente na lista de adivinhas disponíveis'
     })
   }
 
   if(newDataJson.some((item) => item.question === question) || newDataJson.some((item) => item.answer === answer)) {
-    return res.status(400).send({
+    return res.status(422).send({
       message: 'Pergunta ou resposta já existe na lista de confirmação'
     })
   }
@@ -55,7 +55,7 @@ app.post('/adivinhas/send-new', (req, res) => {
 
   writeFileSync('./src/confirm.json', JSON.stringify(newDataJson, null, 2));
 
-  return res.send({
+  return res.status(201).send({
     message: 'Adivinha adicionada com sucesso!',
   })
 })
@@ -63,12 +63,12 @@ app.post('/adivinhas/send-new', (req, res) => {
 app.get('/adivinhas/confirm', (req, res) => {
 
   if (newData.length === 0) {
-    return res.send({
+    return res.status(204).send({
       message: 'Nenhuma adivinha para confirmar',
     })
   }
 
-  return res.send({
+  return res.status(200).send({
     message: 'Total de adivinhas para confirmar: ' + newData.length,
     data: newData
   });
@@ -79,7 +79,7 @@ app.post('/adivinhas/confirm/:id', (req, res) => {
 
   if(!id) {
     return res.status(400).send({
-      message: 'ID é obrigatório'
+      message: 'ID no parâmetro é obrigatório'
     })
   }
 
@@ -101,7 +101,7 @@ app.post('/adivinhas/confirm/:id', (req, res) => {
   writeFileSync('./src/confirm.json', JSON.stringify(newDataJson, null, 2));
   writeFileSync('./src/adivinhas.json', JSON.stringify(DataJson, null, 2));
 
-  res.send({
+  res.status(200).send({
     message: 'Adivinha confirmada com sucesso!',
     list: DataJson.at(-1)
   })

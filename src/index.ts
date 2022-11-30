@@ -35,13 +35,13 @@ app.post('/adivinhas/send-new', (req, res) => {
     })
   }
 
-  if(DataJson.some((item) => item.question === question) || DataJson.some((item) => item.question === answer)) {
+  if(DataJson.some((item) => item.question === question) || DataJson.some((item) => item.answer === answer)) {
     return res.status(400).send({
       message: 'Pergunta ou resposta já existente na lista de adivinhas disponíveis'
     })
   }
 
-  if(newDataJson.some((item) => item.answer === question) || newDataJson.some((item) => item.answer === answer)) {
+  if(newDataJson.some((item) => item.question === question) || newDataJson.some((item) => item.answer === answer)) {
     return res.status(400).send({
       message: 'Pergunta ou resposta já existe na lista de confirmação'
     })

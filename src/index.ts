@@ -21,12 +21,12 @@ app.use(express.json())
 
 app.get('/adivinhas', (req, res) => {
   return res.send({
-    message: 'Total de adivinhas: ' + data.length,
+    message: 'Total de adivinhas disponíveis: ' + data.length,
     list: data
   });
 });
 
-app.post('/adivinhas/send-new', (req, res) => {
+app.post('/adivinhas/suggestion', (req, res) => {
   const { question, answer } = req.body;
 
   if(!question || !answer) {
@@ -43,7 +43,7 @@ app.post('/adivinhas/send-new', (req, res) => {
 
   if(newDataJson.some((item) => item.question === question) || newDataJson.some((item) => item.answer === answer)) {
     return res.status(422).send({
-      message: 'Pergunta ou resposta já existe na lista de confirmação'
+      message: 'Pergunta ou resposta já existe na lista de adivinhas sugeridas'
     })
   }
 
@@ -60,21 +60,21 @@ app.post('/adivinhas/send-new', (req, res) => {
   })
 })
 
-app.get('/adivinhas/confirm', (req, res) => {
+app.get('/adivinhas/suggestions', (req, res) => {
 
   if (newData.length === 0) {
     return res.status(204).send({
-      message: 'Nenhuma adivinha para confirmar',
+      message: 'Nenhuma adivinhas foram sugeridas no momento',
     })
   }
 
   return res.status(200).send({
-    message: 'Total de adivinhas para confirmar: ' + newData.length,
+    message: 'Total de adivinhas sugeridas no momento: ' + newData.length,
     data: newData
   });
 })
 
-app.post('/adivinhas/confirm/:id', (req, res) => {
+app.post('/adivinhas/suggestions/confirm/:id', (req, res) => {
   const { id } = req.params;
 
   if(!id) {
@@ -87,7 +87,7 @@ app.post('/adivinhas/confirm/:id', (req, res) => {
 
   if(!findAdivinha) {
     return res.status(400).send({
-      message: 'ID não existe na lista de confirmação'
+      message: 'ID não existe na lista de adivinhas sugeridas'
     })
   }
 
@@ -102,7 +102,7 @@ app.post('/adivinhas/confirm/:id', (req, res) => {
   writeFileSync('./src/adivinhas.json', JSON.stringify(DataJson, null, 2));
 
   res.status(200).send({
-    message: 'Adivinha confirmada com sucesso!',
+    message: 'Adivinha aprovado com sucesso!',
     list: DataJson.at(-1)
   })
 })

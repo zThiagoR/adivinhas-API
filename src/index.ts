@@ -6,13 +6,13 @@ import newData from './confirm.json';
 
 const newDataJson: [{
   id: number;
-  pergunta: string;
-  resposta: string;
+  question: string;
+  answer: string;
 }] = JSON.parse(JSON.stringify(newData));
 
 const DataJson: [{
-  pergunta: string;
-  resposta: string;
+  question: string;
+  answer: string;
 }] = JSON.parse(JSON.stringify(data));
 
 const app = express();
@@ -27,21 +27,21 @@ app.get('/adivinhas', (req, res) => {
 });
 
 app.post('/adivinhas/send-new', (req, res) => {
-  const { pergunta, resposta } = req.body;
+  const { question, answer } = req.body;
 
-  if(!pergunta || !resposta) {
+  if(!question || !answer) {
     return res.status(400).send({
       message: 'Pergunta e resposta são obrigatórios'
     })
   }
 
-  if(DataJson.some((item) => item.pergunta === pergunta) || DataJson.some((item) => item.resposta === resposta)) {
+  if(DataJson.some((item) => item.question === question) || DataJson.some((item) => item.question === answer)) {
     return res.status(400).send({
       message: 'Pergunta ou resposta já existente na lista de adivinhas disponíveis'
     })
   }
 
-  if(newDataJson.some((item) => item.pergunta === pergunta) || newDataJson.some((item) => item.resposta === resposta)) {
+  if(newDataJson.some((item) => item.answer === question) || newDataJson.some((item) => item.answer === answer)) {
     return res.status(400).send({
       message: 'Pergunta ou resposta já existe na lista de confirmação'
     })
@@ -49,8 +49,8 @@ app.post('/adivinhas/send-new', (req, res) => {
 
   newDataJson.push({
     id: newDataJson.length + 1,
-    pergunta,
-    resposta
+    question,
+    answer
   });
 
   writeFileSync('./src/confirm.json', JSON.stringify(newDataJson, null, 2));
@@ -92,8 +92,8 @@ app.post('/adivinhas/confirm/:id', (req, res) => {
   }
 
   DataJson.push({
-    pergunta: findAdivinha.pergunta,
-    resposta: findAdivinha.resposta
+    question: findAdivinha.question,
+    answer: findAdivinha.answer
   });
 
   newDataJson.splice(newDataJson.indexOf(findAdivinha), 1);
